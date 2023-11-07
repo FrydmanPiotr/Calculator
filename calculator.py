@@ -1,54 +1,61 @@
 """Aplikacja okienkowa Kalkulator.
    Autor: Piotr Frydman.
 """
-from tkinter import Tk, Button, Label, Entry
+import tkinter as tk
 import operator
+import time
 
-calc = Tk()
-calc.title("Kalkulator")
-calc.geometry('400x450')
+class Calculator(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("Kalkulator")
+        self.geometry('300x350')
 
-l1 = Label(calc, text = "1. liczba")
-l1.pack()
-e1 = Entry(calc, bd =3)
-e1.pack()
+        self.l1 = tk.Label(self, text = "1. liczba")
+        self.l1.pack()
+        self.e1 = tk.Entry(self, bd =3)
+        self.e1.pack()
 
-l2 = Label(calc, text = "2. liczba")
-l2.pack()
-e2 = Entry(calc, bd =3)
-e2.pack()
+        self.l2 = tk.Label(self, text = "2. liczba")
+        self.l2.pack()
+        self.e2 = tk.Entry(self, bd =3)
+        self.e2.pack()
 
-def calculate(operation):
-    try:
-        a = int(e1.get())
-        b = int(e2.get())
-        if operation == "+":
-            result = operator.add(a, b)
-        elif operation == "-":
-            result = operator.sub(a, b)
-        elif operation == "*":
-            result = operator.mul(a, b)
-        elif operation == "/":
-            result = operator.truediv(a, b)
-        label.config(text=result)
-    except ZeroDivisionError:
-        label.config(text="Nie wolno dzielić przez zero!")
-    except ValueError:
-        label.config(text="Proszę podać 2 liczby.")
+        badd = tk.Button(self, text="+", width=6, command=lambda: self.calculate("+"))
+        bsub = tk.Button(self, text="-", width=6, command=lambda: self.calculate("-"))
+        bmul = tk.Button(self, text="*", width=6, command=lambda: self.calculate("*"))
+        bdiv = tk.Button(self, text="/", width=6, command=lambda: self.calculate("/"))
 
-add_button = Button(calc, text="+", width=6,command=lambda: calculate("+"))
-sub_button = Button(calc, text="-", width=6, command=lambda: calculate("-"))
-mul_button = Button(calc, text="*", width=6, command=lambda: calculate("*"))
-div_button = Button(calc, text="/", width=6, command=lambda: calculate("/"))
+        badd.pack()
+        bsub.pack()
+        bmul.pack()
+        bdiv.pack()
 
-add_button.pack()
-sub_button.pack()
-mul_button.pack()
-div_button.pack()
+        self.label = tk.Label(self, text="Wynik")
+        self.label.pack(pady=10)
+        self.outcome = tk.Label(self)
+        self.outcome.pack(pady=5)
 
-result_label = Label(calc, text="Wynik")
-result_label.pack(pady=10)
-label = Label(calc)
-label.pack(pady=5)
-
+    def calculate(self, operation):            
+        try:
+            a = int(self.e1.get())
+            b = int(self.e2.get())
+            if operation == "+":
+                result = operator.add(a,b)
+            elif operation == "-":
+                result = operator.sub(a, b)
+            elif operation == "*":
+                result = operator.mul(a, b)
+            elif operation == "/":
+                if b == 0:
+                    self.outcome.config(text="Nie wolno dzielić przez zero!")
+                    return
+                
+                result = operator.truediv(a, b)
+            self.outcome.config(text=result)
+            
+        except ValueError:
+            self.outcome.config(text="Proszę podać 2 liczby.")
+            
+calc = Calculator()
 calc.mainloop()
