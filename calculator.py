@@ -1,5 +1,6 @@
-"""Aplikacja okienkowa Kalkulator.
-   Autor: Piotr Frydman.
+"""
+Aplikacja okienkowa Kalkulator.
+Autor: Piotr Frydman.
 """
 import tkinter as tk
 from tkinter import messagebox
