@@ -6,32 +6,71 @@ import tkinter as tk
 from tkinter import messagebox
 import operator
 
-
 class Calculator(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Kalkulator")
-        self.geometry('300x350')
+        self.geometry('300x350+500+250')
+        self.resizable(False, False)
         self.memory = []
-
-        self.entry = tk.Entry(self, bd =3)
-        self.entry.pack()
-
+        
+        #położenie elementów w oknie
+        self.columnconfigure(0, weight=2)
+        self.columnconfigure(1, weight=2)
+        self.columnconfigure(2, weight=2)
+        self.columnconfigure(3, weight=3)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=2)
+        self.rowconfigure(2, weight=2)
+        self.rowconfigure(3,weight=2)
+        self.rowconfigure(4,weight=2)
+        
+        self.entry = tk.Entry(self,justify="right", bd =3,width=30)
+        self.entry.grid(column=3,row=0)
+        self.entry.focus()
+        self.set_number()
+        
         buttons = {
             '+': operator.add,
             '-': operator.sub,
             '*': operator.mul,
             '/': operator.truediv,
         }
-
+        i = 0
         for symbol, op in buttons.items():
-            btn = tk.Button(self, text=symbol, width=6, command=lambda op=op: self.calculate(op))
-            btn.pack()
+            btn = tk.Button(self, text=symbol, width=4,
+                            command=lambda op=op: self.calculate(op))
+            i+=1
+            btn.grid(column=3,row=i)
 
+    def set_number(self):
+        btn1 = tk.Button(self,text="1",width=4, command=lambda:self.set_text("1"))
+        btn1.grid(column=0,row=1)
+        btn2 = tk.Button(self,text="2",width=4, command=lambda:self.set_text("2"))
+        btn2.grid(column=1,row=1)
+        btn3 = tk.Button(self,text="3",width=4, command=lambda:self.set_text("3"))
+        btn3.grid(column=2,row=1)
+        
+        btn4 = tk.Button(self,text="4",width=4, command=lambda:self.set_text("4"))
+        btn4.grid(column=0,row=2)
+        btn5 = tk.Button(self,text="5",width=4, command=lambda:self.set_text("5"))
+        btn5.grid(column=1,row=2)
+        btn6 = tk.Button(self,text="6",width=4,command=lambda:self.set_text("6"))
+        btn6.grid(column=2,row=2)
+
+        btn7 = tk.Button(self,text="7",width=4,command=lambda:self.set_text("7"))
+        btn7.grid(column=0,row=3)
+        btn8 = tk.Button(self,text="8",width=4,command=lambda:self.set_text("8"))
+        btn8.grid(column=1,row=3)
+        btn9 = tk.Button(self,text="9",width=4,command=lambda:self.set_text("9"))
+        btn9.grid(column=2,row=3)
+        clear_btn = tk.Button(self, text="Wyczyść", width=8,command=self.clear_entries)
+        clear_btn.grid(column=0,row=4)
+            
     def calculate(self, operation):            
         try:
-            num = int(self.entry.get())
-            self.memory.append(num)
+            number = int(self.entry.get())
+            self.memory.append(number)
             self.clear_entries()
             
             if len(self.memory) == 2:
@@ -47,9 +86,12 @@ class Calculator(tk.Tk):
             
         except ValueError:
             messagebox.showerror("Błąd", "Proszę podać poprawne liczby.")
-            
+
+    def set_text(self,text,event=None):
+        self.entry.insert(0,text)
+        
     def clear_entries(self):
-        self.entry.delete(0, 'end')
+        self.entry.delete(0, tk.END)
         
 calc = Calculator()
 calc.mainloop()
