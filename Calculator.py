@@ -10,25 +10,25 @@ class Calculator(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Kalkulator")
-        self.geometry('300x350+500+250')
+        self.geometry('250x200+500+250')
         self.resizable(False, False)
         self.memory = []
         
         #położenie elementów w oknie
-        self.columnconfigure(0, weight=2)
-        self.columnconfigure(1, weight=2)
-        self.columnconfigure(2, weight=2)
-        self.columnconfigure(3, weight=3)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+        self.columnconfigure(2, weight=1)
+        self.columnconfigure(3, weight=1)
         self.rowconfigure(0, weight=1)
-        self.rowconfigure(1, weight=2)
-        self.rowconfigure(2, weight=2)
-        self.rowconfigure(3,weight=2)
-        self.rowconfigure(4,weight=2)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
+        self.rowconfigure(3,weight=1)
+        self.rowconfigure(4,weight=1)
         
-        self.entry = tk.Entry(self,justify="right", bd =3,width=30)
+        self.entry = tk.Entry(self,justify="right",bd =3,width=20,
+                              font=('Arial',9))
         self.entry.grid(column=3,row=0)
         self.entry.focus()
-        self.set_number()
         
         buttons = {
             '+': operator.add,
@@ -36,14 +36,13 @@ class Calculator(tk.Tk):
             '*': operator.mul,
             '/': operator.truediv,
         }
-        i = 0
-        for symbol, op in buttons.items():
-            btn = tk.Button(self, text=symbol, width=4,
-                            command=lambda op=op: self.calculate(op))
+        i=1
+        for i, (symbol, op) in enumerate(buttons.items(), start=0):
+            btn = tk.Button(self, text=symbol, command=lambda op=op:
+                            self.calculate(op),width=4)
             i+=1
             btn.grid(column=3,row=i)
 
-    def set_number(self):
         btn1 = tk.Button(self,text="1",width=4, command=lambda:self.set_text("1"))
         btn1.grid(column=0,row=1)
         btn2 = tk.Button(self,text="2",width=4, command=lambda:self.set_text("2"))
@@ -64,33 +63,38 @@ class Calculator(tk.Tk):
         btn8.grid(column=1,row=3)
         btn9 = tk.Button(self,text="9",width=4,command=lambda:self.set_text("9"))
         btn9.grid(column=2,row=3)
-        clear_btn = tk.Button(self, text="Wyczyść", width=8,command=self.clear_entries)
-        clear_btn.grid(column=0,row=4)
+
+        result_btn = tk.Button(self, text=".", width=4,command=lambda:self.set_text("."))
+        result_btn.grid(column=0,row=4)
+        
+        clear_btn = tk.Button(self, text="C", width=4,command=self.clear_entry)
+        clear_btn.grid(column=1,row=4)
             
     def calculate(self, operation):            
         try:
-            number = int(self.entry.get())
+            number = float(self.entry.get())
             self.memory.append(number)
-            self.clear_entries()
+            self.clear_entry()
             
             if len(self.memory) == 2:
                 result = operation(self.memory[0], self.memory[1])
 
                 if operation == operator.truediv and self.memory[1] == 0:
                     messagebox.showerror("Błąd", "Nie wolno dzielić przez zero!")
-                    self.clear_entries()
+                    self.clear_entry()
                 else:
-                    self.clear_entries()
-                    self.entry.insert(0, result)
+                    self.clear_entry()
+                    self.entry.insert(0,result)
                     self.memory = []
             
         except ValueError:
             messagebox.showerror("Błąd", "Proszę podać poprawne liczby.")
-
+    
     def set_text(self,text):
-        self.entry.insert(0,text)
+        cursor_position = self.entry.index(tk.INSERT)
+        self.entry.insert(cursor_position,text)
         
-    def clear_entries(self):
+    def clear_entry(self):
         self.entry.delete(0, tk.END)
         
 calc = Calculator()
