@@ -64,8 +64,8 @@ class Calculator(tk.Tk):
         btn9 = tk.Button(self,text="9",width=4,command=lambda:self.set_text("9"))
         btn9.grid(column=2,row=3)
 
-        result_btn = tk.Button(self, text=".", width=4,command=lambda:self.set_text("."))
-        result_btn.grid(column=0,row=4)
+        dot_btn = tk.Button(self, text=".", width=4,command=lambda:self.set_text("."))
+        dot_btn.grid(column=0,row=4)
         
         clear_btn = tk.Button(self, text="C", width=4,command=self.clear_entry)
         clear_btn.grid(column=1,row=4)
