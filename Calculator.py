@@ -1,7 +1,8 @@
 """
-Aplikacja okienkowa Kalkulator.
-Autor: Piotr Frydman.
+Calculator windows application.
+Author: Piotr Frydman.
 """
+
 import tkinter as tk
 from tkinter import messagebox
 import operator
@@ -9,12 +10,12 @@ import operator
 class Calculator(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Kalkulator")
-        self.geometry('250x200+500+250')
+        self.title("Calculator")
+        self.geometry('280x200+500+250')
         self.resizable(False, False)
         self.memory = []
         
-        #położenie elementów w oknie
+        #position of elements in window
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
@@ -80,7 +81,8 @@ class Calculator(tk.Tk):
                 result = operation(self.memory[0], self.memory[1])
 
                 if operation == operator.truediv and self.memory[1] == 0:
-                    messagebox.showerror("Błąd", "Nie wolno dzielić przez zero!")
+                    messagebox.showerror("Error",
+                                         "Division by zero is not permitted!")
                     self.clear_entry()
                 else:
                     self.clear_entry()
@@ -88,7 +90,7 @@ class Calculator(tk.Tk):
                     self.memory = []
             
         except ValueError:
-            messagebox.showerror("Błąd", "Proszę podać poprawne liczby.")
+            messagebox.showerror("Error", "Please enter correct numbers")
     
     def set_text(self,text):
         cursor_position = self.entry.index(tk.INSERT)
